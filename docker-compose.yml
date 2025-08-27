@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: kundali
+      POSTGRES_PASSWORD: kundali
+      POSTGRES_DB: kundali
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  backend:
+    build: ./apps/backend
+    ports:
+      - '4000:4000'
+    env_file:
+      - ./apps/backend/.env
+    depends_on:
+      - postgres
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./apps/frontend/.env
+volumes:
+  postgres_data:
